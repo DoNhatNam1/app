@@ -1,0 +1,57 @@
+version: "3"
+services:
+  next-web:
+    depends_on:
+      postgres-v15:
+        condition: service_started
+      pgadmin-v4:
+        condition: service_started
+    build:
+      context: ../../
+      dockerfile: docker/development/Dockerfile
+    image: donhatnamdocker/next-web-development:latest
+    restart: unless-stopped
+    ports:
+      - "3002:3000"
+    networks:
+      - postgres-db-network
+    environment:
+      - HOSTNAME=localhost
+      - MYSQL_PRISMA_URL='mysql://root:teste@localhost:3309/finaldb'
+      - POSTGRES_PRISMA_URL="postgresql://postgres:password@postgres-v15:5432/postgres"
+      - POSTGRES_URL_NON_POOLING="postgresql://postgres:password@postgres-v15:5432/postgres"
+  postgres-v15:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - postgres-db-network
+  pgadmin-v4:
+    image: dpage/pgadmin4
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "teste@teste.com"
+      PGADMIN_DEFAULT_PASSWORD: "teste"
+    ports:
+      - 16543:80
+    volumes:
+      - ./servers.json:/pgadmin4/servers.json
+    networks:
+      - postgres-db-network
+
+volumes:
+  postgres-db-volume:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./data
+networks:
+  postgres-db-network:
+    driver: bridge
