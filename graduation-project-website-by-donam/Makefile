@@ -8,11 +8,11 @@ build-nextjs: ## Build the server docker container.
 	
 .PHONY: start-nextjs
 start-nextjs: ## Start the server docker container.
-	docker compose -f docker-compose.yml up -d --build nextjs_c 
+	docker compose -f docker-compose.yml up -d nextjs_c 
 
 .PHONY: start-full
 start-full: ## Start the full docker container.
-	docker compose -f docker-compose.yml up -d --build
+	docker compose -f docker-compose.yml up -d
 
 .PHONY: sync-db
 sync-db: ## sync the database with prisma migrate.

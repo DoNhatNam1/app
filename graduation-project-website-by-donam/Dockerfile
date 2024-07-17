@@ -58,7 +58,6 @@ COPY --from=builder --chown=nextjs:nodejs /app/graduation-project-website-by-don
 
 USER root
 COPY start.sh /start.sh
-COPY .dockerignore /.dockerignore
 RUN chmod +x /start.sh
 
 USER nextjs
