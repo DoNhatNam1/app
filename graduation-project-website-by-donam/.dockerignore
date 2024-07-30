@@ -6,6 +6,5 @@ README.md
 .next
 docker-compose.yml
 .git
-.env
 data.example.sql
 setupDocker.sh
